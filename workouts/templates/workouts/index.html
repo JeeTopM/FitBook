@@ -1,0 +1,56 @@
+{% extends 'workouts/base.html' %}
+
+{% block title %}Главная - FitBook{% endblock %}
+
+{% block content %}
+<h2>Добро пожаловать в FitBook! 👋</h2>
+<p>Здесь ты сможешь вести учет своих тренировок и отслеживать прогресс.</p>
+
+<div style="margin: 2rem 0;">
+    <h3>📊 Быстрый старт:</h3>
+    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+        <a href="{% url 'workouts:add_exercise' %}" class="btn">
+            ➕ Добавить первое упражнение
+        </a>
+        <a href="{% url 'workouts:exercise_list' %}" class="btn btn-secondary">
+            📋 Посмотреть все упражнения
+        </a>
+    </div>
+</div>
+
+<div style="background: #f0f4ff; padding: 1.5rem; border-radius: 8px; margin-top: 2rem;">
+    <h3>📈 Статистика:</h3>
+    <p>Всего упражнений в базе: <strong>{{ total_exercises }}</strong></p>
+</div>
+
+{% if page_obj %}
+<div style="margin-top: 2rem;">
+    <h3>🎯 Последние добавленные упражнения:</h3>
+    <div class="exercise-grid">
+        {% for exercise in page_obj %}
+        <div class="exercise-card">
+            <strong>{{ exercise.name }}</strong>
+            <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+                Добавлено: {{ exercise.created_at|date:"d.m.Y" }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if page_obj.has_other_pages %}
+    <div style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 2rem;">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-secondary">Назад</a>
+        {% endif %}
+
+        <span style="padding: 0.8rem 1.5rem;">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-secondary">Вперед</a>
+        {% endif %}
+    </div>
+    {% endif %}
+{% endif %}
+{% endblock %}

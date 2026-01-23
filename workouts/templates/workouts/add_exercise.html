@@ -1,0 +1,30 @@
+{% extends 'workouts/base.html' %}
+
+{% block title %}Добавить упражнение - FitBook{% endblock %}
+
+{% block content %}
+<h2>➕ Добавить новое упражнение</h2>
+<p>Введи название упражнения, которое хочешь добавить в свой дневник.</p>
+
+<form method="post" style="margin-top: 2rem;">
+    {% csrf_token %}
+
+    <div class="form-group">
+        {{ form.name.label_tag }}
+        {{ form.name }}
+        {% if form.name.errors %}
+            <div style="color: #dc3545; margin-top: 0.5rem;">
+                {{ form.name.errors }}
+            </div>
+        {% endif %}
+        <small style="color: #666; display: block; margin-top: 0.5rem;">
+            Например: Подтягивания, Отжимания, Приседания
+        </small>
+    </div>
+
+    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button type="submit" class="btn">💾 Сохранить упражнение</button>
+        <a href="{% url 'workouts:index' %}" class="btn btn-secondary">↩️ Отмена</a>
+    </div>
+</form>
+{% endblock %}

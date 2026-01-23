@@ -1,0 +1,42 @@
+{% extends 'workouts/base.html' %}
+
+{% block title %}Все упражнения - FitBook{% endblock %}
+
+{% block content %}
+<h2>📋 Все упражнения</h2>
+<p>Здесь отображаются все упражнения, добавленные в систему.</p>
+
+{% if exercises %}
+<div class="exercise-grid" style="margin-top: 2rem;">
+    {% for exercise in exercises %}
+    <div class="exercise-card">
+        <strong>{{ exercise.name }}</strong>
+        <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+            ID: {{ exercise.id }} • Добавлено: {{ exercise.created_at|date:"d.m.Y" }}
+        </div>
+        <div style="margin-top: 1rem;">
+            <form method="post" action="{% url 'workouts:delete_exercise' exercise.id %}"
+                  style="display: inline;"
+                  onsubmit="return confirm('Удалить упражнение «{{ exercise.name }}»?')">
+                {% csrf_token %}
+                <button type="submit" style="background: none; border: none; color: #dc3545; cursor: pointer; font-size: 0.9rem;">
+                    🗑️ Удалить
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div style="text-align: center; padding: 3rem; background: #f8f9fa; border-radius: 8px; margin-top: 2rem;">
+    <p style="font-size: 1.2rem; color: #666;">Упражнений пока нет 😕</p>
+    <a href="{% url 'workouts:add_exercise' %}" class="btn" style="margin-top: 1rem;">
+        ➕ Добавить первое упражнение
+    </a>
+</div>
+{% endif %}
+
+<div style="margin-top: 2rem;">
+    <a href="{% url 'workouts:index' %}" class="btn btn-secondary">← Назад на главную</a>
+</div>
+{% endblock %}
